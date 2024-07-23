@@ -20,8 +20,8 @@ spring:
             scope: profile
 
           kakao:
-            client-id: 718ecf6676c1af0dba5bf261baff15b0
-            client-secret: pG9EsPDtgyJIXTpRIQ0WCclyM8P0kFzc
+            client-id: ${KAKAO_CLIENT_ID}
+            client-secret: ${KAKAO_CLIENT_SECRET}
             authorization-grant-type: authorization_code
             client-name: kakao
             redirect-uri: http://localhost:8080/login/oauth2/code/kakao
@@ -54,4 +54,4 @@ spring:
         format_sql: true
 
   jwt:
-    secret: askdlsakdlkslaasdssdsadsdsadcsadsadsadsadsadsdsadasd
+    secret: ${JWT_SECRET}

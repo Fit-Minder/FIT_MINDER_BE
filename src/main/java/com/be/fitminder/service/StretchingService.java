@@ -18,37 +18,39 @@ public class StretchingService {
 
     private final StretchingRepository stretchingRepository;
 
-    public List<StretchingResponseDTO>findStretchingsByPart(String part){
+    /**
+     * 부위별 스트레칭 리스트 반환
+     */
+    public List<StretchingResponseDTO.PartListDTO> findStretchingsByPart(String part){
         List<Stretching> stretchings = stretchingRepository.findByPart(part);
 
         return stretchings.stream()
-                .map(stretching -> StretchingResponseDTO.builder()
-                        .name(stretching.getName())
-                        .part(stretching.getPart()).build())
+                .map(StretchingResponseDTO.PartListDTO::new)
                 .collect(Collectors.toList());
     }
 
-    public StretchingResponseDTO findStretchingById(Long id){
+    /**
+     * 스트레칭 단건 조회
+     */
+    public StretchingResponseDTO.StretchingDTO findStretchingById(Long id){
         Stretching stretching = stretchingRepository.findById(id)
                 .orElseThrow(IllegalAccessError::new);
 
-        StretchingResponseDTO stretchingResponseDTO = StretchingResponseDTO.builder()
-                .name(stretching.getName())
-                .part(stretching.getPart())
-                .duration(stretching.getDuration_time())
-                .effect(stretching.getEffect())
-                .reason(stretching.getReason()).build();
-        return stretchingResponseDTO;
+        StretchingResponseDTO.StretchingDTO sResponseDTO = new StretchingResponseDTO.StretchingDTO(stretching);
+        return sResponseDTO;
     }
 
-    public StretchingResponseDTO findStretchingDetail(Long id){
+    /**
+     * 해당 스트레칭에 대한 세부 가이드
+     */
+    public StretchingResponseDTO.GuideResponseDTO findStretchingDetail(Long id){
         Stretching stretching = stretchingRepository.findById(id)
                 .orElseThrow(IllegalAccessError::new);
-        StretchingResponseDTO stretchingResponseDTO = StretchingResponseDTO.builder()
-                .guide(stretching.getGuide())
-                .name(stretching.getName())
-                .duration(stretching.getDuration_time()).build();
-        return stretchingResponseDTO;
+
+        StretchingResponseDTO.GuideResponseDTO s_ResponseDTO
+                = new StretchingResponseDTO.GuideResponseDTO(stretching);
+
+        return s_ResponseDTO;
     }
 
 

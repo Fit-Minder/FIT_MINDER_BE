@@ -20,7 +20,7 @@ public class StretchingController {
      * 부위별 스트레칭 조회
      */
     @GetMapping("/stretchings")
-    public ResponseEntity<List<StretchingResponseDTO>>stretchingListByPart(@RequestParam("part") String part){
+    public ResponseEntity<List<StretchingResponseDTO.PartListDTO>> stretchingListByPart(@RequestParam("part") String part){
         return ResponseEntity.ok().body(stretchingService.findStretchingsByPart(part));
     }
 
@@ -28,7 +28,7 @@ public class StretchingController {
      * 스트레칭 단건 조회
      */
     @GetMapping("/stretchings/{stretchingId}")
-    public ResponseEntity<StretchingResponseDTO>findStretching(@PathVariable("stretchingId") Long id){
+    public ResponseEntity<StretchingResponseDTO.StretchingDTO> findStretching(@PathVariable("stretchingId") Long id){
         return ResponseEntity.ok().body(stretchingService.findStretchingById(id));
 
     }
@@ -38,7 +38,7 @@ public class StretchingController {
      * 스트레칭 세부 가이드
      */
     @GetMapping("/stretchings/{stretchingId}/guide")
-    public ResponseEntity<StretchingResponseDTO> findStretchingGuide(@PathVariable("stretchingId") Long id){
+    public ResponseEntity<StretchingResponseDTO.GuideResponseDTO> findStretchingGuide(@PathVariable("stretchingId") Long id){
         return ResponseEntity.ok().body(stretchingService.findStretchingDetail(id));
     }
 }

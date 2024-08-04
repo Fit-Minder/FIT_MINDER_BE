@@ -91,6 +91,7 @@ public class SecurityConfig {
                         .requestMatchers("/").permitAll()
                         .requestMatchers("/reissue").permitAll()
                         .requestMatchers("/my").hasRole("USER")
+                        .requestMatchers("/**").permitAll()
                         .anyRequest().authenticated());
 
         //세션 설정 : STATELESS

@@ -39,12 +39,20 @@ public class AlarmService {
         return savedAlarm.getId();
     }
 
-    public void updateAlarm(Alarm alarm) throws SchedulerException {
-        deleteAlarm(alarm.getId());
-        alarmRepository.save(alarm);
+    @Transactional
+    public void updateAlarm(AlarmRequestDTO alarmRequestDTO, Long memberId) throws SchedulerException {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(NoSuchElementException::new);
+        Alarm alarm = member.getAlarm();
+        alarm.updateAlarm(alarmRequestDTO, member);
+
+        scheduler.deleteJob(new JobKey("alarmJob" + alarm.getId()));
+
         scheduleAlarm(alarm);
+        log.info("알람 생성 완료");
     }
 
+    @Transactional
     public void deleteAlarm(Long alarmId) throws SchedulerException {
         scheduler.deleteJob(new JobKey("alarmJob" + alarmId));
         alarmRepository.deleteById(alarmId);

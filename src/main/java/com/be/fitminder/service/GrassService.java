@@ -43,7 +43,7 @@ public class GrassService {
     }
 
     /**
-     * 잔디 조회(한달)
+     * 잔디 조회(일주일)
      */
     public WeekGrassResponseDTO findWeekGrasses(Long memberId) {
         Member member = memberRepository.findById(memberId)
@@ -61,13 +61,13 @@ public class GrassService {
     }
 
     /**
-     * 잔디 조회(일주일)
+     * 잔디 조회(한달)
      */
     public MonthGrassResponseDTO findMonthGrasses(Long memberId) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(NoSuchElementException::new);
 
-        LocalDate monthAgo = LocalDate.now().minusMonths(1);
+        LocalDate monthAgo = LocalDate.now().withDayOfMonth(1).minusDays(1);
 
         List<Grass> monthGrasses = grassRepository.findGrassesByMemberAndGrassDateAfter(member, monthAgo);
 

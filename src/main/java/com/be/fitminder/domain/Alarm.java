@@ -41,4 +41,12 @@ public class Alarm extends BaseEntity {
                 .member(member)
                 .build();
     }
+
+    public void updateAlarm(AlarmRequestDTO alarmRequestDTO, Member member) {
+        this.days = alarmRequestDTO.getDays();
+        this.startTime = alarmRequestDTO.getStartTime();
+        this.endTime = alarmRequestDTO.getEndTime();
+        this.intervalInMinutes = alarmRequestDTO.getIntervalInMinutes();
+        this.member = member;
+    }
 }

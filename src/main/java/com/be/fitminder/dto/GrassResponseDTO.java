@@ -61,7 +61,7 @@ public class GrassResponseDTO {
 
         public MonthGrassResponseDTO(Member member, List<GrassDTO> grassDTOS) {
             this.memberName = member.getName();
-            this.withTime = (int) ChronoUnit.DAYS.between(LocalDate.now(), member.getCreatedAt().toLocalDate());
+            this.withTime = (int) ChronoUnit.DAYS.between(member.getCreatedAt().toLocalDate(), LocalDate.now());
             this.grassCount = member.getGrasses().size();
             this.grassList = grassDTOS;
         }

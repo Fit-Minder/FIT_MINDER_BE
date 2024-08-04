@@ -28,8 +28,17 @@ public class Member extends BaseEntity {
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Grass> grasses = new ArrayList<>();
 
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Alarm alarm;
+
+    private String fcmToken;
+
     public void changeName(String name) {
         this.name = name;
+    }
+
+    public void updateFcmToken(String fcmToken) {
+        this.fcmToken = fcmToken;
     }
 
 //    public Member(Long id, String username, String name, String role) {

@@ -33,6 +33,9 @@ public class Member extends BaseEntity {
 
     private String fcmToken;
 
+    @OneToMany(mappedBy = "member" , cascade = CascadeType.ALL , orphanRemoval = true)
+    private List<Like> likeStretching = new ArrayList<>();
+
     public void changeName(String name) {
         this.name = name;
     }

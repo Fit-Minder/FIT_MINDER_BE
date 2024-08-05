@@ -29,4 +29,11 @@ public class LikeController {
         return ResponseEntity.ok().body(likeService.getLike(memberId));
     }
 
+    @DeleteMapping("/members/{member-id}/like/{stretching-id}")
+    public ResponseEntity<String> deleteLike(@PathVariable("member-id") Long memberId,
+                                           @PathVariable("stretching-id") Long stretchingId) {
+        likeService.deleteLike(memberId,stretchingId);
+        return ResponseEntity.ok().body("삭제 완료");
+    }
+
 }

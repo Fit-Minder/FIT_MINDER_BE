@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.be.fitminder.dto.GrassResponseDTO.*;
@@ -31,6 +32,11 @@ public class GrassService {
     public Long createGrass(Long memberId) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(NoSuchElementException::new);
+
+        Optional<Grass> existingGrass = grassRepository.findGrassByMemberAndGrassDate(member, LocalDate.now());
+        if (existingGrass.isPresent()) {
+            return existingGrass.get().getId();
+        }
 
         Grass grass = Grass.builder()
                 .grassDate(LocalDate.now())

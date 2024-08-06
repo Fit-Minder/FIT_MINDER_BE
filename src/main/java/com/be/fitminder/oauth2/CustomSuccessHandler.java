@@ -1,9 +1,12 @@
 package com.be.fitminder.oauth2;
 
 import com.be.fitminder.domain.CustomOAuth2User;
+import com.be.fitminder.domain.Member;
 import com.be.fitminder.domain.RefreshEntity;
 import com.be.fitminder.jwt.JWTUtil;
+import com.be.fitminder.repository.MemberRepository;
 import com.be.fitminder.repository.RefreshRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,6 +21,7 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 
 @Component
@@ -26,6 +30,7 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
     private final JWTUtil jwtUtil;
     private final RefreshRepository refreshRepository;
+    private final MemberRepository memberRepository;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
@@ -50,6 +55,18 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         response.setHeader("access", access);
         response.addCookie(createCookie("refresh", refresh));
         response.setStatus(HttpStatus.OK.value());
+
+        Member member = memberRepository.findByUsername(username)
+                .orElseThrow(RuntimeException::new);
+
+        HashMap<String, Object> responseBody = new HashMap<>();
+
+        responseBody.put("memberId", member.getId());
+
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.getWriter().write(new ObjectMapper().writeValueAsString(responseBody));
+
     }
 
     private void addRefreshEntity(String username, String refresh, Long expiredMs) {

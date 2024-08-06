@@ -16,6 +16,8 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -46,9 +48,9 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
         //리소스 서버에서 발급 받은 정보로 사용자를 특정할 아이디값을 만듬
         String username = oAuth2Response.getProvider() + " " + oAuth2Response.getProviderId();
-        Member existData = memberRepository.findByUsername(username);
+        Optional<Member> existData = memberRepository.findByUsername(username);
 
-        if (existData == null) {
+        if (existData.isEmpty()) {
             Member member = Member.builder()
                     .username(username)
                     .name(oAuth2Response.getName())
@@ -68,14 +70,14 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
         else {
 
-            existData.changeName(oAuth2Response.getName());
+            existData.get().changeName(oAuth2Response.getName());
 
-            memberRepository.save(existData);
+            memberRepository.save(existData.get());
 
             MemberDTO memberDTO = MemberDTO.builder()
-                    .username(existData.getUsername())
+                    .username(existData.get().getUsername())
                     .name(oAuth2Response.getName())
-                    .role(existData.getRole())
+                    .role(existData.get().getRole())
                     .build();
 
             return new CustomOAuth2User(memberDTO);
